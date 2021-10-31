@@ -18,41 +18,39 @@ afterAll(() => {
 })
 
 describe('imagesToPDF', () => {
-  it('should return a object with base64 and uint8array function', async () => {
+  it('should return a object with dataUrl and arrayBuffer function', async () => {
     const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
 
-    const pdf = await imagesToPDF([ab])
+    const pdf = await imagesToPDF([{ src: ab }])
 
     expect(pdf).toMatchInlineSnapshot(`
       Object {
-        "base64": [Function],
-        "uint8array": [Function],
+        "arrayBuffer": [Function],
+        "dataUrl": [Function],
       }
     `)
   })
 
-  describe('imagesToPDF:base64', () => {
-    it('should return base64 string', async () => {
+  describe('imagesToPDF:dataUrl', () => {
+    it('should return data url string', async () => {
       const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
-      const pdf = await imagesToPDF([ab])
-
-      expect(
-        (await pdf.base64()).startsWith('data:application/pdf;base64')
-      ).toBe(true)
+      const pdf = await imagesToPDF([{ src: ab }])
+      expect(pdf.dataUrl().startsWith('data:application/pdf;')).toBe(true)
     })
   })
 
-  describe('imagesToPDF:uint8array', () => {
-    it('should return uint8array', async () => {
+  describe('imagesToPDF:arrayBuffer', () => {
+    it('should return arrayBuffer', async () => {
       const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
-      const pdf = await imagesToPDF([ab])
-      expect((await pdf.uint8array()) instanceof Uint8Array).toBe(true)
+      const pdf = await imagesToPDF([{ src: ab }])
+      expect(pdf.arrayBuffer() instanceof ArrayBuffer).toBe(true)
     })
 
-    it('should return uint8array which should be a pdf', async () => {
+    it('should return arrayBuffer which should be a pdf', async () => {
       const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
-      const pdf = await imagesToPDF([ab])
-      expect(isPdf(await pdf.uint8array())).toBe(true)
+      const pdf = await imagesToPDF([{ src: ab }])
+
+      expect(isPdf(new Uint8Array(pdf.arrayBuffer()))).toBe(true)
     })
   })
 })

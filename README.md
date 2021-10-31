@@ -19,7 +19,7 @@ yarn add @coderosh/images-to-pdf
 
 ## Usage
 
-This package requires image to be of type arraybuffer.
+This package requires image to be of type arraybuffer or uint8array.
 
 - Using `imagesToPDF` function.
 
@@ -29,92 +29,38 @@ This package requires image to be of type arraybuffer.
   const main = async () => {
     const img1 = await fetch('https://img1').then((res) => res.arrayBuffer())
     const img2 = await fetch('https://img2').then((res) => res.arrayBuffer())
-
-    const pdf = await imagesToPDF([img1, img2])
-
-    const base64Url = await pdf.base64()
-    const uint8array = await pdf.uint8array()
-
-    console.log(base64Url, uint8array)
-  }
-
-  main()
-  ```
-
-- Using `ImagesToPDF` class.
-
-  ```js
-  import ImagesToPDF from '@coderosh/images-to-pdf'
-
-  const main = async () => {
-    const pdf = await ImagesToPDF.create()
-    const img1 = await fetch('https://img1').then((res) => res.arrayBuffer())
-    const img2 = await fetch('https://img2').then((res) => res.arrayBuffer())
-
-    await pdf.addImage(img1)
-    await pdf.addImage(img2)
-
-    const base64Url = await pdf.save('base64')
-    const uint8array = await pdf.save('uint8array')
-
-    console.log(base64Url, uint8array)
-  }
-
-  main()
-  ```
-
-### Passing Options
-
-`height`, `width` and `type` of image will be calculated by this package. But if you want you can pass those on your own too.
-
-- Using `ImagesToPDF` class.
-
-  ```js
-  import ImagesToPDF from '@coderosh/images-to-pdf'
-
-  const main = async () => {
-    const pdf = await ImagesToPDF.create()
-    const img1 = await fetch('https://img1.png').then((res) =>
-      res.arrayBuffer()
-    )
-    const img2 = await fetch('https://img2.jpg').then((res) =>
-      res.arrayBuffer()
-    )
-
-    await pdf.addImage(img1, { height: 234, width: 234, type: 'png' })
-    await pdf.addImage(img2, { type: 'jpg' })
-
-    const base64Url = await pdf.save('base64')
-    const uint8array = await pdf.save('uint8array')
-
-    console.log(base64Url, uint8array)
-  }
-
-  main()
-  ```
-
-- Using `imagesToPDF` function.
-
-  ```js
-  import { imagesToPDF } from '@coderosh/images-to-pdf'
-
-  const main = async () => {
-    const img1 = await fetch('https://img1.png').then((res) =>
-      res.arrayBuffer()
-    )
-    const img2 = await fetch('https://img2.jpg').then((res) =>
-      res.arrayBuffer()
-    )
 
     const pdf = await imagesToPDF([
-      { src: img1, options: { type: 'png' } },
-      { src: img2, options: { height: 234, width: 234, type: 'jpg' } },
+      { src: img1 },
+      { src: img2, options: { height: 234, width: 345 } },
     ])
 
-    const base64Url = await pdf.base64()
-    const uint8array = await pdf.uint8array()
+    const dataUrl = pdf.dataUrl()
+    const arrayBuffer = pdf.arrayBuffer()
+  }
 
-    console.log(base64Url, uint8array)
+  main()
+  ```
+
+- Using `ImagesToPDF` class.
+
+  ```js
+  import ImagesToPDF from '@coderosh/images-to-pdf'
+
+  const main = async () => {
+    const img1 = await fetch('https://img1').then((res) => res.arrayBuffer())
+    const img2 = await fetch('https://img2').then((res) => res.arrayBuffer())
+    const img3 = await fetch('https://img3').then((res) => res.arrayBuffer())
+    const img4 = await fetch('https://img4').then((res) => res.arrayBuffer())
+
+    const imgToPdf = new ImagesToPDF([{ src: img1 }, { src: img2 }])
+    imgToPdf.addImage(img3)
+    imgToPdf.addImage(img4, { height: 234, width: 324 })
+
+    const pdf = await imgToPdf.createPdf()
+
+    const dataUrl = pdf.dataUrl()
+    const arrayBuffer = pdf.arrayBuffer()
   }
 
   main()

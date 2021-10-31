@@ -1,6 +1,6 @@
 {
   "name": "@coderosh/images-to-pdf",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Combine images to a single pdf on browser and node",
   "main": "dist/index.js",
   "type": "module",
@@ -61,6 +61,6 @@
   },
   "dependencies": {
     "@coderosh/image-size": "^2.0.0",
-    "pdf-lib": "^1.17.0"
+    "jspdf": "^2.4.0"
   }
 }
