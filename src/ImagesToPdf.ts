@@ -9,12 +9,26 @@ export interface ImageOptions {
 }
 
 class ImagesToPDF {
+  public images: { src: ArrayBuffer | Uint8Array; options?: ImageOptions }[] =
+    []
+
   constructor(
-    public images: {
-      src: ArrayBuffer | Uint8Array
-      options?: ImageOptions
-    }[] = []
-  ) {}
+    images: (
+      | {
+          src: ArrayBuffer | Uint8Array
+          options?: ImageOptions
+        }
+      | (ArrayBuffer | Uint8Array)
+    )[] = []
+  ) {
+    for (const image of images) {
+      if (image instanceof ArrayBuffer || image instanceof Uint8Array) {
+        this.images.push({ src: image })
+      } else {
+        this.images.push(image)
+      }
+    }
+  }
 
   addImage(img: ArrayBuffer | Uint8Array, options?: ImageOptions) {
     this.images.push({ src: img, options })

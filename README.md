@@ -31,7 +31,7 @@ This package requires image to be of type arraybuffer or uint8array.
     const img2 = await fetch('https://img2').then((res) => res.arrayBuffer())
 
     const pdf = await imagesToPDF([
-      { src: img1 },
+      img1,
       { src: img2, options: { height: 234, width: 345 } },
     ])
 
@@ -53,7 +53,7 @@ This package requires image to be of type arraybuffer or uint8array.
     const img3 = await fetch('https://img3').then((res) => res.arrayBuffer())
     const img4 = await fetch('https://img4').then((res) => res.arrayBuffer())
 
-    const imgToPdf = new ImagesToPDF([{ src: img1 }, { src: img2 }])
+    const imgToPdf = new ImagesToPDF([img1, { src: img2 }])
     imgToPdf.addImage(img3)
     imgToPdf.addImage(img4, { height: 234, width: 324 })
 

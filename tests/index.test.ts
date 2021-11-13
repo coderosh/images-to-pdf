@@ -31,6 +31,18 @@ describe('imagesToPDF', () => {
     `)
   })
 
+  it('should work for more than one image', async () => {
+    const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
+    const pdf = await imagesToPDF([ab, ab])
+
+    expect(pdf).toMatchInlineSnapshot(`
+    Object {
+      "arrayBuffer": [Function],
+      "dataUrl": [Function],
+    }
+  `)
+  })
+
   describe('imagesToPDF:dataUrl', () => {
     it('should return data url string', async () => {
       const imagesToPDF = await import('../src').then((res) => res.imagesToPDF)
@@ -51,6 +63,19 @@ describe('imagesToPDF', () => {
       const pdf = await imagesToPDF([{ src: ab }])
 
       expect(isPdf(new Uint8Array(pdf.arrayBuffer()))).toBe(true)
+    })
+  })
+
+  describe('ImagesToPdf', () => {
+    test('addImage method should work', async () => {
+      const ImagesToPdf = await import('../src').then((res) => res.default)
+      const pdf = new ImagesToPdf()
+      pdf.addImage(ab, { height: 20, width: 20 })
+      pdf.addImage(new Uint8Array(ab), { height: 20 })
+
+      expect(pdf.images.length).toBe(2)
+      const arb = (await pdf.createPdf()).arrayBuffer()
+      expect(isPdf(new Uint8Array(arb))).toBe(true)
     })
   })
 })
